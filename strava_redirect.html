@@ -4,14 +4,15 @@
     <title>Strava Redirect</title>
     <script type="text/javascript">
         function getQueryParam(param) {
-            var result = window.location.search.match(new RegExp("(\\?|&)" + param + "(\\[\\])?=([^&]*)"));
-            return result ? result[3] : false;
+            var result = window.location.search.match(new RegExp("[?&]" + param + "=([^&]*)"));
+            return result ? decodeURIComponent(result[1]) : null;
         }
 
         window.onload = function() {
             var code = getQueryParam('code');
             if (code) {
-                window.location.href = "pedalcrew://auth?code=" + code;
+                // Redirect to the app using the deep link scheme
+                window.location.href = "pedalcrew://callback?code=" + code;
             } else {
                 document.body.innerHTML = "<h1>Authorization failed. No code returned.</h1>";
             }
